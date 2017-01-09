@@ -10,7 +10,7 @@ import java.util.*;
  */
 public class Average {
 	private long total;
-	private int count;
+	private long count;
 	private double average;
 	private String name;
 
@@ -28,27 +28,30 @@ public class Average {
 	/**
 	 * Method to read file and calculate average if the numbers in the file
 	 */
-	public void scanDataAndCalculateAverage() {
+	public String scanDataAndCalculateAverage() {
+		String a = null;
 		try {
-			File f = new File(name + ".txt");
+			File f = new File(name);
 			Scanner in = new Scanner(f);
 			if(!f.exists()){
-				throw new Exception("Error" + name + ".txt (The system cannot find the fiel specified");
+				throw new Exception("Error: " + name + "(No such file or directory)");
 			}
 			if (!in.hasNext()) {
-				throw new Exception(name + ".txt is empty");
+				throw new Exception(name + " is empty");
 			}
 			if (!in.hasNextInt()) {
-				throw new Exception(name + ".txt" + " is empty does not hace numeric data");
+				throw new Exception("Error:" + name + " does not have numeric data");
 			}
 			while (in.hasNextInt()) {
 				total += in.nextInt();
 				count++;
 				average = (double) total / count;
 			}
-			System.out.println("Average = " + average);
+			a = "" + average;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			System.exit(1);
 		}
+		return a;
 	}
 }
