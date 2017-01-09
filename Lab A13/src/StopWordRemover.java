@@ -11,9 +11,10 @@ import javax.swing.plaf.synth.SynthScrollBarUI;
  * 
  * @author John Dang period 3
  *
+ *
  */
 public class StopWordRemover {
-	String stopList = "a an the for of at on in to her she him his he her's and with was is";
+	String stopList = " a an the for of at on in to her she him his he her's and with was is ";
 	String inFile, outFile;
 	int maxLineLength;
 
@@ -41,41 +42,35 @@ public class StopWordRemover {
 	 */
 	public int removeStopWords() {
 		int count = 0;
-		String output = "";
 		File f;
 		Scanner in;
+		FileWriter file;
 		try {
 			f = new File(inFile);
 			in = new Scanner(f);
+			file =  new FileWriter(outFile);
 			String a;
 			while (in.hasNext()) {
 				a = in.next();
-				if (stopList.indexOf(a.toLowerCase()) == -1) {
-					output += a + " ";
-				}else{
+				int lineLength = 0;
+				if (stopList.indexOf(" " + a.toLowerCase() + " ") == -1) {
+					if(maxLineLength > lineLength + a.length()){
+						lineLength += a.length();
+						file.write(a + " ");
+					}else{
+						lineLength = a.length();
+						file.write("\n");
+						file.write(a);
+					}
+				} else {
 					count++;
 				}
 			}
+			file.close();
 			in.close();
 		} catch (FileNotFoundException i) {
 			System.out.println(i.getMessage());
-		}
-		FileWriter file;
-		try {
-			file = new FileWriter(outFile);
-			String temp;
-			while (output.length() > 0) {
-				if (output.length() > maxLineLength) {
-					temp = output.substring(0, maxLineLength) + "\n";
-					file.write(temp);
-					output = output.substring(maxLineLength);
-				} else {
-					file.write(output);
-					output = "";
-				}
-			}
-			file.close();
-		} catch (IOException e) {
+		}catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
 		return count;
