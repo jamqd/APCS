@@ -49,18 +49,20 @@ public class StopWordRemover {
 			f = new File(inFile);
 			in = new Scanner(f);
 			file =  new FileWriter(outFile);
+			if (!in.hasNext()) {
+				throw new IllegalArgumentException("Error: " + inFile + " is empty");
+			}
 			String a;
+			int lineLength = 0;
 			while (in.hasNext()) {
 				a = in.next();
-				int lineLength = 0;
 				if (stopList.indexOf(" " + a.toLowerCase() + " ") == -1) {
 					if(maxLineLength > lineLength + a.length()){
-						lineLength += a.length();
+						lineLength += a.length() + 1;
 						file.write(a + " ");
 					}else{
 						lineLength = a.length();
-						file.write("\n");
-						file.write(a);
+						file.write("\n" + a + " ");
 					}
 				} else {
 					count++;
@@ -69,9 +71,11 @@ public class StopWordRemover {
 			file.close();
 			in.close();
 		} catch (FileNotFoundException i) {
-			System.out.println(i.getMessage());
+			System.out.println("Error: " + i.getMessage());
 		}catch (IOException e) {
 			System.out.println(e.getMessage());
+		}catch (IllegalArgumentException z){
+			System.out.println(z.getMessage());
 		}
 		return count;
 	}
