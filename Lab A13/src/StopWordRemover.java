@@ -52,22 +52,29 @@ public class StopWordRemover {
 			if (!in.hasNext()) {
 				throw new IllegalArgumentException("Error: " + inFile + " is empty");
 			}
-			String a;
+			String a = "";
+			String output = "";
 			int lineLength = 0;
 			while (in.hasNext()) {
 				a = in.next();
+				if(a.length() + lineLength >= maxLineLength){
+				  	if (stopList.indexOf(" " + a.toLowerCase() + " ") == -1) {
+						  file.write(output.trim() + "\n");
+						  lineLength = a.length() +1;
+					  	output = a + " ";
+			    	} else {
+				  	count++;
+				  }
+				}else{
 				if (stopList.indexOf(" " + a.toLowerCase() + " ") == -1) {
-					if(maxLineLength > lineLength + a.length()){
 						lineLength += a.length() + 1;
-						file.write(a + " ");
-					}else{
-						lineLength = a.length();
-						file.write("\n" + a + " ");
-					}
+						output += a + " ";
 				} else {
 					count++;
 				}
+				}
 			}
+			file.write(output.trim());
 			file.close();
 			in.close();
 		} catch (FileNotFoundException i) {
