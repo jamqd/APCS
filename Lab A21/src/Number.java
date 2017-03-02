@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 import java.util.*;
-
+/**
+ * 
+ * @author John Dang
+ * @period 3
+ *
+ * Class representing a number
+ */
 public class Number
 {
     int value;
@@ -15,6 +21,7 @@ public class Number
     {
         value = 0;
         base = 10;
+        digits.add(new Digit(0,10));
     }
     /**
      * Constructor to initialize the value and base of the number
@@ -26,6 +33,12 @@ public class Number
     {
         value = val;
         base  = b;
+        int temp  = value;
+        while(temp > base - 1){
+        	digits.add(new Digit(temp % base, base));
+        	temp /= base;
+        }
+        digits.add(new Digit(temp, base));
     }
     
     /**
@@ -36,8 +49,8 @@ public class Number
     public String toString()
     {
         String s = "";
-    	for(int i = 0; i <= digits.size(); i++){
-        	s += digits.get(digits.size() - i).toString();
+    	for(int i = digits.size()-1; i >= 0; i--){
+        	s += digits.get(i).toString();
         } 
         return s;
 	
@@ -48,10 +61,11 @@ public class Number
     public void increment()
     {
         for(Digit a: digits){
-        	if(a.increment()){
-        		           
+        	if(!a.increment()){
+        		return;
         	}
         }
+        digits.add(new Digit(1, base));
     }
  }
     

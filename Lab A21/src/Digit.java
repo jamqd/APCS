@@ -1,3 +1,10 @@
+/**
+ * 
+ * @author John Dang
+ * @period 3
+ *
+ * Class representing a digit
+ */
 public class Digit
 {
     int value;
@@ -29,7 +36,11 @@ public class Digit
      */
     public String toString()
     {
-        return "" + value;
+    	if ( value < 10 ){
+            return "" + value;
+    	}
+        char a = (char)( value - 10 + 'A' );
+        return "" + a;
 	
     }
     /**
